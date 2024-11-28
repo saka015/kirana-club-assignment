@@ -48,4 +48,3 @@ export default tseslint.config({
   },
 })
 ```
-# kirana-club-assignment
