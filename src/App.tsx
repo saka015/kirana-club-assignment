@@ -30,7 +30,7 @@ const App = () => {
           element: <ContestDetailsPage />,
         },
         {
-          path: "/favorites",
+          path: "/favourites",
           element: <Favourites />,
         }
       ],

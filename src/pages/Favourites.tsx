@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getFavorites } from "../utils/AddFavourites";
+import { Badge, Link } from "@shopify/polaris";
 
 const Favourites = () => {
   const [favorites, setFavorites] = useState([]);
@@ -10,12 +11,16 @@ const Favourites = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Favourites</h1>
+    <div className="all-contests-cards">
+      <h1 className="fav-heading">Favourites</h1>
       {favorites.length > 0 ? (
         <ul>
           {favorites.map((fav) => (
-            <li key={fav.id}>{fav.name}</li>
+            <div className="contest-card mt-4" key={fav.id}>
+              <Link removeUnderline url={`/contest/${fav.id}`}>
+                <h2>{fav.name}</h2>
+              </Link>
+            </div>
           ))}
         </ul>
       ) : (

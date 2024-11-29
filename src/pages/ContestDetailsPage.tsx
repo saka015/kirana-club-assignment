@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { useContests } from "../api/codeforcesApi";
-import { Text, Tooltip } from "@shopify/polaris";
+import { Spinner, Text, Tooltip } from "@shopify/polaris";
 import { Card, InlineGrid } from "@shopify/polaris";
 import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
 import { CiBellOn } from "react-icons/ci";
@@ -10,7 +10,6 @@ import {
   getFavorites,
 } from "../utils/AddFavourites";
 import { useState } from "react";
-
 
 const ContestDetailsPage = () => {
   const { contestId } = useParams<{ contestId: string }>();
@@ -61,6 +60,13 @@ const ContestDetailsPage = () => {
     ? convertToRelativeDays(startTimeSeconds)
     : 0;
 
+  if (isLoading) {
+    return (
+      <div className="flex-center h-screen">
+        <Spinner accessibilityLabel="Spinner example" size="large" />
+      </div>
+    );
+  }
   return (
     <div className="contest-details">
       <Card roundedAbove="sm">
