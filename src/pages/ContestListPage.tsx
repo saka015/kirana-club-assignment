@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
 import { useContests } from "../api/codeforcesApi";
 import { CodeforcesContest, CodeforcesApiResponse } from "../types/codeforces";
@@ -71,7 +71,12 @@ function ContestListPage() {
     return <p>Error: {error?.comment || "An error occurred"}</p>;
   }
 
-  const contestsData = data as CodeforcesApiResponse;
+  const contestsData = data as CodeforcesApiResponse | undefined;
+
+  if (!contestsData) {
+    return <p>No contests available.</p>;
+  }
+
   const favoriteIds = getFavorites().map((fav: { id: number }) => fav.id);
 
   const filteredContests = contestsData.result.filter((contest) => {
@@ -139,7 +144,7 @@ function ContestListPage() {
         </div>
         <div className="flex-8">
           <TextField
-            label="Search Contests using names"
+            label="Search contests using names"
             value={searchValue}
             onChange={(value) => setSearchValue(value)}
             clearButton
