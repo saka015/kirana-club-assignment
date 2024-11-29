@@ -97,7 +97,7 @@ function ContestListPage() {
   const options = [
     { label: "All", value: "" },
     { label: "ICPC", value: "ICPC" },
-    { label: "Codeforces", value: "CF" },
+    { label: "CF", value: "CF" },
   ];
 
   const itemsPerPageOptions = [
