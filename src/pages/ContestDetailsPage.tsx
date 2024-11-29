@@ -1,17 +1,28 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useContests } from "../api/codeforcesApi";
+import { Text, Tooltip } from "@shopify/polaris";
+import { Card, InlineGrid } from "@shopify/polaris";
+import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
+import { CiBellOn } from "react-icons/ci";
+import {
+  addToFavorites,
+  removeFromFavorites,
+  getFavorites,
+} from "../utils/AddFavourites";
+import { useState } from "react";
+
 
 const ContestDetailsPage = () => {
   const { contestId } = useParams<{ contestId: string }>();
-  const { data, isLoading, isError, error } = useContests();
+  const { data, isLoading, isError } = useContests();
+  const [favorites, setFavorites] = useState(getFavorites());
 
   const contest = data?.result.find(
     (contest) => contest.id === Number(contestId)
   );
 
-  function convertToIST(startTimeSeconds: number) {
-    const date = new Date(startTimeSeconds * 1000);
-    const options = {
+  const convertToIST = (startTimeSeconds: number) =>
+    new Date(startTimeSeconds * 1000).toLocaleString("en-IN", {
       timeZone: "Asia/Kolkata",
       year: "numeric",
       month: "long",
@@ -20,18 +31,30 @@ const ContestDetailsPage = () => {
       minute: "numeric",
       second: "numeric",
       hour12: true,
-    };
-    return date.toLocaleString("en-IN", options);
-  }
+    });
 
-  function convertToRelativeDays(startTimeSeconds: number) {
-    const date = new Date(startTimeSeconds * 1000);
-    const now = new Date();
-    const diffTime = now.getTime() - date.getTime(); // Difference in milliseconds
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
+  const convertToRelativeDays = (startTimeSeconds: number) => {
+    const diffDays = Math.floor(
+      (Date.now() - startTimeSeconds * 1000) / (1000 * 60 * 60 * 24)
+    );
     return diffDays;
-  }
+  };
+
+  const handleAddToFavorites = () => {
+    if (contest) {
+      addToFavorites({ id: contest.id, name: contest.name });
+      setFavorites(getFavorites());
+    }
+  };
+
+  const handleRemoveFromFavorites = () => {
+    if (contest) {
+      removeFromFavorites(contest.id);
+      setFavorites(getFavorites());
+    }
+  };
+
+  const isInFavorites = favorites.some((fav) => fav?.id === contest?.id);
 
   const startTimeSeconds = contest?.startTimeSeconds;
   const diffDays = startTimeSeconds
@@ -39,19 +62,80 @@ const ContestDetailsPage = () => {
     : 0;
 
   return (
-    <div>
-      <h1>Contest Name: {contest?.name}</h1>
-      <h1>Contest Details: {contestId}</h1>
-      <p>Phase: {contest?.phase}</p>
-      <p>Contest type: {contest?.type}</p>
-      <p>
-        Contest starts: {startTimeSeconds && convertToIST(startTimeSeconds)}
-      </p>
-      <p>
-        {contest?.startTimeSeconds >= 0
-          ? `Contest in ${Math.abs(diffDays)} days`
-          : `${Math.abs(diffDays)} days ago`}
-      </p>
+    <div className="contest-details">
+      <Card roundedAbove="sm">
+        <div className="contest-details-container">
+          <div className="notification flex-center flex-row">
+            {contest?.phase !== "FINISHED" ? (
+              <div className="flex blue-bg">
+                <span className="reminder">
+                  <CiBellOn />
+                </span>
+                <Text as="p" variant="headingMd" tone="caution">
+                  <p className="blue">
+                    {contest?.startTimeSeconds >= 0
+                      ? `Contest in ${Math.abs(diffDays)} days`
+                      : `${Math.abs(diffDays)} days ago`}
+                  </p>
+                </Text>
+              </div>
+            ) : (
+              <div className="flex bg-gray">
+                <span className="reminder">
+                  <CiBellOn />
+                </span>
+                <Text as="p" variant="headingMd" tone="caution">
+                  <p className="gray">Contest Finished</p>
+                </Text>
+              </div>
+            )}
+
+            <div className="favorite-icon">
+              <Tooltip
+                content={
+                  isInFavorites ? "Remove from favorites" : "Add to favorites"
+                }
+              >
+                {isInFavorites ? (
+                  <IoHeartSharp
+                    className="fav-icon"
+                    onClick={handleRemoveFromFavorites}
+                    style={{ color: "red" }}
+                  />
+                ) : (
+                  <IoHeartOutline
+                    className="fav-icon"
+                    onClick={handleAddToFavorites}
+                  />
+                )}
+              </Tooltip>
+            </div>
+          </div>
+          <InlineGrid columns="2fr auto">
+            <Text as="p" variant="headingXl" tone="caution">
+              {contest?.name}
+            </Text>
+          </InlineGrid>
+          <div className="flex mt-4">
+            <span style={{ fontSize: "15px" }}>Contest starts:</span>
+            <Text as="p" variant="headingMd" tone="caution">
+              {startTimeSeconds && convertToIST(startTimeSeconds)}
+            </Text>
+          </div>
+          <div className="flex">
+            <span style={{ fontSize: "15px" }}>Contest type:</span>
+            <Text as="p" variant="headingMd" tone="caution">
+              {contest?.type}
+            </Text>
+          </div>
+          <Link
+            to={`https://codeforces.com/contest/${contest?.id}`}
+            target="_blank"
+          >
+            <button className="go_to_contest">Go to contest</button>
+          </Link>
+        </div>
+      </Card>
     </div>
   );
 };
