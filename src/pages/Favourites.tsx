@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getFavorites } from "../utils/AddFavourites";
-import { Badge, Link } from "@shopify/polaris";
+import { Link } from "@shopify/polaris";
+import { ContestFavorite } from "../types/codeforces";
 
 const Favourites = () => {
-  const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavorites] = useState<ContestFavorite[]>([]);
 
   useEffect(() => {
     const storedFavorites = getFavorites();

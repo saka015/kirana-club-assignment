@@ -7,7 +7,8 @@ export interface CodeforcesContest {
   durationSeconds: number;
   startTimeSeconds: number;
   relativeTimeSeconds: number;
-  result: string | undefined | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  result?: any;
 }
 
 export interface CodeforcesApiResponse {
@@ -20,9 +21,27 @@ export interface CodeforcesApiError {
   comment: string;
 }
 
+export interface ContestFavorite {
+  id: number;
+  name: string;
+}
+
 export type CodeforcesApiResult = CodeforcesApiResponse | CodeforcesApiError;
 
-// Optional: Add a type guard to check if the response is an error
-export function isCodeforcesApiError(response: CodeforcesApiResult): response is CodeforcesApiError {
-  return typeof response.status === 'string' || typeof response.status === 'number';
+export function isCodeforcesApiError(
+  response: CodeforcesApiResult
+): response is CodeforcesApiError {
+  return (
+    typeof response.status === "string" || typeof response.status === "number"
+  );
 }
+
+export interface CodeforcesContestResponse {
+  result: CodeforcesContest[];
+}
+
+
+export type UseContestsReturn = {
+  data?: CodeforcesContestResponse;
+  isLoading: boolean;
+};

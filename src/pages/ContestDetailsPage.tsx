@@ -10,16 +10,22 @@ import {
   getFavorites,
 } from "../utils/AddFavourites";
 import { useState } from "react";
+import { UseContestsReturn, ContestFavorite } from "../types/codeforces";
 
 const ContestDetailsPage = () => {
+
+
+
+
   const { contestId } = useParams<{ contestId: string }>();
-  const { data, isLoading } = useContests();
-  const [favorites, setFavorites] = useState(getFavorites());
+  const { data, isLoading } = useContests() as UseContestsReturn;
 
-  const contest = data?.result.find(
-    (contest) => contest.id === Number(contestId)
+  const [favorites, setFavorites] = useState<ContestFavorite[]>(getFavorites());
+
+  const contest = data?.result?.find(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (contest: any) => contest.id === Number(contestId)
   );
-
   const convertToIST = (startTimeSeconds: number) =>
     new Date(startTimeSeconds * 1000).toLocaleString("en-IN", {
       timeZone: "Asia/Kolkata",
@@ -56,7 +62,8 @@ const ContestDetailsPage = () => {
   const isInFavorites = favorites.some((fav) => fav?.id === contest?.id);
 
   const startTimeSeconds = contest?.startTimeSeconds;
-  const diffDays = startTimeSeconds
+
+  const diffDays = startTimeSeconds !== undefined
     ? convertToRelativeDays(startTimeSeconds)
     : 0;
 
@@ -79,7 +86,7 @@ const ContestDetailsPage = () => {
                 </span>
                 <Text as="p" variant="headingMd" tone="caution">
                   <p className="blue">
-                    {contest?.startTimeSeconds >= 0
+                    {contest?.startTimeSeconds !== undefined && contest.startTimeSeconds >= 0
                       ? `Contest in ${Math.abs(diffDays)} days`
                       : `${Math.abs(diffDays)} days ago`}
                   </p>
@@ -125,7 +132,8 @@ const ContestDetailsPage = () => {
           <div className="flex mt-4">
             <span style={{ fontSize: "15px" }}>Contest starts:</span>
             <Text as="p" variant="headingMd" tone="caution">
-              {startTimeSeconds && convertToIST(startTimeSeconds)}
+
+              {startTimeSeconds !== undefined && convertToIST(startTimeSeconds)}
             </Text>
           </div>
           <div className="flex">
@@ -144,6 +152,6 @@ const ContestDetailsPage = () => {
       </Card>
     </div>
   );
-};
 
+};
 export default ContestDetailsPage;
