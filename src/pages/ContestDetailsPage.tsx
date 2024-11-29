@@ -13,7 +13,7 @@ import { useState } from "react";
 
 const ContestDetailsPage = () => {
   const { contestId } = useParams<{ contestId: string }>();
-  const { data, isLoading, isError } = useContests();
+  const { data, isLoading } = useContests();
   const [favorites, setFavorites] = useState(getFavorites());
 
   const contest = data?.result.find(

@@ -7,6 +7,7 @@ export interface CodeforcesContest {
   durationSeconds: number;
   startTimeSeconds: number;
   relativeTimeSeconds: number;
+  result: string | undefined | null;
 }
 
 export interface CodeforcesApiResponse {
@@ -20,3 +21,8 @@ export interface CodeforcesApiError {
 }
 
 export type CodeforcesApiResult = CodeforcesApiResponse | CodeforcesApiError;
+
+// Optional: Add a type guard to check if the response is an error
+export function isCodeforcesApiError(response: CodeforcesApiResult): response is CodeforcesApiError {
+  return typeof response.status === 'string' || typeof response.status === 'number';
+}
