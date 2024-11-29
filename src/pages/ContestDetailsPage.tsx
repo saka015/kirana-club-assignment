@@ -13,13 +13,8 @@ import { useState } from "react";
 import { UseContestsReturn, ContestFavorite } from "../types/codeforces";
 
 const ContestDetailsPage = () => {
-
-
-
-
   const { contestId } = useParams<{ contestId: string }>();
   const { data, isLoading } = useContests() as UseContestsReturn;
-
   const [favorites, setFavorites] = useState<ContestFavorite[]>(getFavorites());
 
   const contest = data?.result?.find(
@@ -62,7 +57,6 @@ const ContestDetailsPage = () => {
   const isInFavorites = favorites.some((fav) => fav?.id === contest?.id);
 
   const startTimeSeconds = contest?.startTimeSeconds;
-
   const diffDays = startTimeSeconds !== undefined
     ? convertToRelativeDays(startTimeSeconds)
     : 0;
@@ -132,7 +126,6 @@ const ContestDetailsPage = () => {
           <div className="flex mt-4">
             <span style={{ fontSize: "15px" }}>Contest starts:</span>
             <Text as="p" variant="headingMd" tone="caution">
-
               {startTimeSeconds !== undefined && convertToIST(startTimeSeconds)}
             </Text>
           </div>
@@ -152,6 +145,5 @@ const ContestDetailsPage = () => {
       </Card>
     </div>
   );
-
 };
 export default ContestDetailsPage;
