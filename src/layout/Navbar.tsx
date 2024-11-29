@@ -10,7 +10,7 @@ const Navbar = () => {
           <Button size="large">Home</Button>
         </Link>
         <Link to="/allcontests">
-          <Button size="large">Contest</Button>
+          <Button size="large">All Contests</Button>
         </Link>
       </div>
       <Link to="/favourites">

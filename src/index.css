@@ -1,11 +1,6 @@
-/* body {
-  background-color: #f9f9fd;
-  opacity: 0.8;
-  background-image: radial-gradient(#1a1a60 0.5px, transparent 0.5px),
-    radial-gradient(#1a1a60 0.5px, #f9f9fd 0.5px);
-  background-size: 20px 20px;
-  background-position: 0 0, 10px 10px;
-} */
+body {
+/* overflow-x: hidden; */
+}
 
 nav {
   box-shadow: 1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset,
@@ -311,4 +306,19 @@ footer {
 
 button {
   cursor: pointer;
+}
+
+
+.graph-container
+{
+  border: 1px solid #ccc;
+  margin: 50px;
+}
+
+
+
+@media (max-width: 768px) { /* Adjust the max-width as needed for your mobile breakpoint */
+  .home-page main {
+    flex-direction: column;
+  }
 }

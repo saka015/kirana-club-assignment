@@ -13,6 +13,7 @@ import {
 } from "@shopify/polaris";
 import debounce from "lodash/debounce";
 import { getFavorites } from "../utils/AddFavourites";
+import ChartComponent from "../components/ChartComponent";
 
 function ContestListPage() {
   const { data, isLoading, isError, error } = useContests();
@@ -22,7 +23,7 @@ function ContestListPage() {
   const [selectedContestType, setSelectedContestType] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(25);
-  const [favoritesOnly, setFavoritesOnly] = useState<boolean>(false); // Track favorites-only mode
+  const [favoritesOnly, setFavoritesOnly] = useState<boolean>(false);
 
   const debouncedHandleSearch = useCallback(
     debounce((value: string) => setDebouncedSearchValue(value), 500),
@@ -37,7 +38,7 @@ function ContestListPage() {
   }, [searchValue, debouncedHandleSearch]);
 
   const handleFavoritesToggle = () => {
-    setFavoritesOnly((prev) => !prev); // Toggle favorites-only mode
+    setFavoritesOnly((prev) => !prev);
   };
 
   const handleSelectChange = useCallback(
@@ -79,7 +80,7 @@ function ContestListPage() {
     const nameMatch = contest.name
       .toLowerCase()
       .includes(debouncedSearchValue.toLowerCase());
-    const favoriteMatch = !favoritesOnly || favoriteIds.includes(contest.id); // Filter by favorites if active
+    const favoriteMatch = !favoritesOnly || favoriteIds.includes(contest.id);
     return typeMatch && nameMatch && favoriteMatch;
   });
 
@@ -104,6 +105,10 @@ function ContestListPage() {
 
   return (
     <div>
+      <div className="graph-container">
+        <ChartComponent contests={filteredContests} />
+      </div>
+
       <div className="flex contest-list-page">
         <div className="flex-2 flex flex-center">
           <Select
@@ -120,9 +125,7 @@ function ContestListPage() {
           />
           <Tooltip
             content={
-              !favoritesOnly
-                ? "Filter favourite contests"
-                : "Show all contests"
+              !favoritesOnly ? "Filter favourite contests" : "Show all contests"
             }
           >
             <button className="filter-fav-btn" onClick={handleFavoritesToggle}>

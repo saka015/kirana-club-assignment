@@ -7,17 +7,15 @@ const fetchContests = async (): Promise<CodeforcesApiResponse> => {
     const response = await axios.get<CodeforcesApiResponse>(
       "https://codeforces.com/api/contest.list"
     );
-    return response.data; // Successfully fetched contests
+    return response.data;
   } catch (error: any) {
     if (error.response) {
-      // API-specific error
       const errorData: CodeforcesApiError = error.response.data;
       console.error("Error fetching contests:", errorData);
-      throw new Error(errorData.comment); // Throw an error with the comment
+      throw new Error(errorData.comment);
     } else {
-      // Network or unknown error
       console.error("Network error fetching contests:", error.message);
-      throw new Error("Failed to fetch data."); // Throw a generic error
+      throw new Error("Failed to fetch data.");
     }
   }
 };

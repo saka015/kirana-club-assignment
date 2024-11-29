@@ -3,7 +3,6 @@
 interface ContestFavorite {
   id: number;
   name: string;
-  // Add other properties you want to store as needed
 }
 
 const addToFavorites = (contest: ContestFavorite): void => {
@@ -15,10 +14,8 @@ const addToFavorites = (contest: ContestFavorite): void => {
     favorites = JSON.parse(storedFavorites);
   }
 
-  //Check if contest already exists
   const existingFavorite = favorites.find((fav) => fav.id === contest.id);
   if (existingFavorite) {
-    console.log("Contest already in favorites");
     return;
   }
 
