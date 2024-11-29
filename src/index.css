@@ -1,6 +1,4 @@
-body {
-/* overflow-x: hidden; */
-}
+
 
 nav {
   box-shadow: 1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset,
@@ -308,17 +306,22 @@ button {
   cursor: pointer;
 }
 
-
-.graph-container
-{
+.graph-container {
   border: 1px solid #ccc;
   margin: 50px;
 }
 
-
-
-@media (max-width: 768px) { /* Adjust the max-width as needed for your mobile breakpoint */
+@media (max-width: 768px) {
   .home-page main {
     flex-direction: column;
+  }
+
+  .home-page main button {
+    width: 150px;
+    padding: 5px;
+  }
+
+  .filter-fav-btn{
+    margin-top: 45px;
   }
 }
